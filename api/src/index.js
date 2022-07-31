@@ -35,6 +35,7 @@ expressWs(app);
             }
         }
     });
+    fss.chmodSync(path.join(config.data_directory, globals.data_directories.jobs), 0o711)
 
     logger.info('Loading packages');
     const pkgdir = path.join(
@@ -76,7 +77,6 @@ expressWs(app);
     logger.debug('Registering Routes');
 
     const api_v2 = require('./api/v2');
-    app.use('/api/v2', api_v2);
     app.use('/api/v2', api_v2);
 
     app.use((req, res, next) => {
