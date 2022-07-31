@@ -8,6 +8,7 @@ const globals = require('./globals');
 const fs = require('fs/promises');
 const fss = require('fs');
 const wait_pid = require('waitpid');
+const pidusage = require('pidusage');
 
 const job_states = {
     READY: Symbol('Ready to be primed'),
@@ -138,6 +139,9 @@ class Job {
             var stderr = '';
             var output = '';
 
+            var time = 0;
+            var memory = 0;
+
             const proc = cp.spawn(proc_call[0], proc_call.splice(1), {
                 env: {
                     ...this.runtime.env_vars,
@@ -148,6 +152,11 @@ class Job {
                 uid: this.uid,
                 gid: this.gid,
                 detached: true, //give this process its own process group
+            });
+
+            pidusage(proc.pid, function (err, stats) {
+                memory = stats.memory;
+                time = stats.elapsed;
             });
 
             if (eventBus === null) {
@@ -208,13 +217,19 @@ class Job {
 
             proc.on('exit', (code, signal) => {
                 exit_cleanup();
-
-                resolve({ stdout, stderr, code, signal, output });
+                resolve({
+                    stdout,
+                    stderr,
+                    code,
+                    signal,
+                    output,
+                    memory,
+                    time,
+                });
             });
 
             proc.on('error', err => {
                 exit_cleanup();
-
                 reject({ error: err, stdout, stderr, output });
             });
         });
