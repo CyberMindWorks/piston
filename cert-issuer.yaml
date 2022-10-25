@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+  namespace: sat
+spec:
+  acme:
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: jayasurya@cybermindworks.com
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
