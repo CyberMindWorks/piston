@@ -1,21 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    a8r.io/description: code execution engine for SAT project
-    app.kubernetes.io/component: api
-    app.kubernetes.io/name: "piston-api"
-    app.kubernetes.io/part-of: "sat"
-  creationTimestamp: null
-  labels:
-    io.kompose.service: piston-api
-  name: piston-api
+  name: piston-api-service
 spec:
+  type: LoadBalancer
   ports:
-    - name: "2000"
-      port: 2000
-      targetPort: 2000
+  - port: 80
+    targetPort: 2000
   selector:
     io.kompose.service: piston-api
-status:
-  loadBalancer: {}

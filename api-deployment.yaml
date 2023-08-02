@@ -11,7 +11,7 @@ metadata:
     io.kompose.service: pisont-api-deployment
   name: piston-api-deployment
 spec:
-  replicas: 5
+  replicas: 
   selector:
     matchLabels:
       io.kompose.service: piston-api
@@ -25,21 +25,21 @@ spec:
         io.kompose.service: piston-api
     spec:
       containers:
-        - image: ghcr.io/engineer-man/piston
+        - image: public.ecr.aws/r8o5c0r9/bb-piston
           name: piston-api
           ports:
             - containerPort: 2000
           resources: {}
           volumeMounts:
             - mountPath: /piston/packages
-              name: pv-piston
+              name: my-pv
             - mountPath: /piston/jobs
               name: tempfs-0
             - mountPath: /tmp
               name: tempfs-1
       restartPolicy: Always
       volumes:
-        - name: pv-piston
+        - name: my-pv
           persistentVolumeClaim:
             claimName: data-piston
         - emptyDir:
