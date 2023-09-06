@@ -121,16 +121,19 @@ class Job {
                 '--nofile=' + this.runtime.max_open_files,
                 '--fsize=' + this.runtime.max_file_size,
             ];
-            
+
             const timeout_call = [
-                'timeout', '-s', '9', Math.ceil(timeout / 1000),
+                'timeout',
+                '-s',
+                '9',
+                Math.ceil(timeout / 1000),
             ];
 
             if (memory_limit >= 0) {
                 prlimit.push('--as=' + memory_limit);
             }
 
-            const proc_call = [ 
+            const proc_call = [
                 'nice',
                 ...timeout_call,
                 ...prlimit,
@@ -160,7 +163,7 @@ class Job {
             });
             const t = this;
             pidusage(proc.pid, function (err, stats) {
-                if(err){
+                if (err) {
                     t.logger.info(err);
                     //this.logger.info(err);
                     console.log(err);
@@ -206,10 +209,19 @@ class Job {
             proc.stdout.on('data', async data => {
                 if (eventBus !== null) {
                     eventBus.emit('stdout', data);
-                } else if (stdout.length > this.runtime.output_max_size) {
-                    this.logger.info(`stdout length exceeded`);
-                    process.kill(proc.pid, 'SIGKILL');
-                } else {
+                }
+                // disabling now to allow large outputs
+                // else if (stdout.length > this.runtime.output_max_size) {
+                //     this.logger.info(
+                //         `output max size exceeded ${this.runtime.output_max_size}`
+                //     );
+                //     this.logger.info(
+                //         `stdout length ${stdout.length} and data length ${data.length}`
+                //     );
+                //     this.logger.info(`stdout length exceeded`);
+                //     process.kill(proc.pid, 'SIGKILL');
+                // }
+                else {
                     stdout += data;
                     output += data;
                 }
@@ -361,17 +373,17 @@ class Job {
                     const [_, ruid, euid, suid, fuid] = uid_line.split(/\s+/);
 
                     const [_1, state, user_friendly] = state_line.split(/\s+/);
-                    
-                    const proc_id_int = parse_int(proc_id);
-                    
-                    // Skip over any processes that aren't ours.
-                    if(ruid != this.uid && euid != this.uid) return -1; 
 
-                    if (state == 'Z'){
+                    const proc_id_int = parse_int(proc_id);
+
+                    // Skip over any processes that aren't ours.
+                    if (ruid != this.uid && euid != this.uid) return -1;
+
+                    if (state == 'Z') {
                         // Zombie process, just needs to be waited, regardless of the user id
-                        if(!to_wait.includes(proc_id_int))
+                        if (!to_wait.includes(proc_id_int))
                             to_wait.push(proc_id_int);
-                        
+
                         return -1;
                     }
                     // We should kill in all other state (Sleep, Stopped & Running)
@@ -406,7 +418,7 @@ class Job {
                 // Then clear them out of the process tree
                 try {
                     process.kill(proc, 'SIGKILL');
-                } catch(e) {
+                } catch (e) {
                     // Could already be dead and just needs to be waited on
                     this.logger.debug(
                         `Got error while SIGKILLing process ${proc}:`,
