@@ -158,10 +158,15 @@ class Job {
                 gid: this.gid,
                 detached: true, //give this process its own process group
             });
-
+            const t = this;
             pidusage(proc.pid, function (err, stats) {
-                memory = stats.memory;
-                time = stats.elapsed;
+                if(err){
+                    t.logger.info(err);
+                    //this.logger.info(err);
+                    console.log(err);
+                }
+                memory = stats?.memory ?? 100000;
+                time = stats?.elapsed ?? 10;
             });
 
             if (eventBus === null) {
@@ -453,7 +458,7 @@ class Job {
     }
 
     async cleanup() {
-        this.logger.info(`Cleaning up job`);
+        this.logger.info(`Cleaning up job - aug7`);
 
         this.cleanup_processes(); // Run process janitor, just incase there are any residual processes somehow
         await this.cleanup_filesystem();

@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blackbuck-prod-backend
+spec:
+  type: LoadBalancer
+  selector:
+    app: blackbuck-prod-backend
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blackbuck-prod-backend
+spec:
+  replicas: 15
+  selector:
+    matchLabels:
+      app: blackbuck-prod-backend
+  template:
+    metadata:
+      labels:
+        app: blackbuck-prod-backend
+    spec:
+      containers:
+        - name: app
+          image: 574252320863.dkr.ecr.ap-south-1.amazonaws.com/blackbuck-prod-backend:latest
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+          env:
+            - name: DBHOST
+              value: 'blackbuckvpldb.cw1jq7bqcolw.ap-south-1.rds.amazonaws.com'
+            - name: DBNAME
+              value: 'prod1'
+            - name: DBPORT
+              value: '5432'
+            - name: DBUSER
+              value: 'postgres'
+            - name: DBPASSWORD
+              value: 'mUA88nKQdJ684WVh'
+            - name: ENVIRONMENT
+              value: 'prod'
+            - name: AWS_S3_BUCKET_NAME
+              value: 'blackbucks-media'
+            - name: AWS_ACCESS_KEY
+              value: 'AKIAYLNA3BBP42YR6AVX'
+            - name: AWS_KEY_SECRET
+              value: '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'
+            - name: S3_MEDIA_URL
+              value: 'https://blackbucks-media.s3.ap-south-1.amazonaws.com'
+            - name: FRONTEND_URL
+              value: 'https://taptap.blackbucks.me'
+            - name: GOOGLE_CLIENT_ID
+              value: '818565611374-7u3avvh99gg725616dccin97763voms8.apps.googleusercontent.com'
+            - name: GOOGLE_CLIENT_SECRET
+              value: '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'
+            - name: PISTONAPIURL
+              value: 'https://emkc.org/api/v2/piston/execute'
+            - name: PORT
+              value: '3000'
+            - name: REDIS_URL
+              value: 'bb-prod-new-0001-001.otubpz.0001.aps1.cache.amazonaws.com'
+            - name: CALLBACK_URL
+              value: 'https://taptap.blackbucks.me/api/auth/google/redirect'
+            - name: NO_COLOR
+              value: 'true'
+            - name: MARKETING_DISPLAY_PAGE_LIMIT
+              value: '4'
+            - name: RESUME_SQS
+              value: 'prod-resume'
+            - name: SQS_URL
+              value: 'https://sqs.ap-south-1.amazonaws.com/574252320863'
+            - name: RESUME_TEMPLATE
+              value: 'blackbuck-resume'
+          volumeMounts:
+            - name: tz-config
+              mountPath: /etc/localtime
+      volumes:
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Kolkata
+            type: File
