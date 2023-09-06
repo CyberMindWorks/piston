@@ -3,6 +3,9 @@
     "version": "3.1.1",
     "description": "API for piston - a high performance code execution engine",
     "main": "src/index.js",
+    "scripts": {
+        "deploy": "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/r8o5c0r9 && aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/r8o5c0r9 && docker build -t bb-piston-v2 . && docker tag bb-piston-v2:latest public.ecr.aws/r8o5c0r9/bb-piston-v2:latest && docker push public.ecr.aws/r8o5c0r9/bb-piston-v2:latest"
+    },
     "dependencies": {
         "body-parser": "^1.19.0",
         "chownr": "^2.0.0",
