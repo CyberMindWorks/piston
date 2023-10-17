@@ -209,19 +209,10 @@ class Job {
             proc.stdout.on('data', async data => {
                 if (eventBus !== null) {
                     eventBus.emit('stdout', data);
-                }
-                // disabling now to allow large outputs
-                // else if (stdout.length > this.runtime.output_max_size) {
-                //     this.logger.info(
-                //         `output max size exceeded ${this.runtime.output_max_size}`
-                //     );
-                //     this.logger.info(
-                //         `stdout length ${stdout.length} and data length ${data.length}`
-                //     );
-                //     this.logger.info(`stdout length exceeded`);
-                //     process.kill(proc.pid, 'SIGKILL');
-                // }
-                else {
+                } else if (stdout.length > this.runtime.output_max_size) {
+                    this.logger.info(`stdout length exceeded`);
+                    process.kill(proc.pid, 'SIGKILL');
+                } else {
                     stdout += data;
                     output += data;
                 }
