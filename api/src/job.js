@@ -252,7 +252,7 @@ class Job {
             proc.on('close', (code, signal) => {
                 this.close_cleanup();
 
-                resolve({ stdout, stderr, code, signal, output });
+                resolve({ stdout, stderr, code, signal, output, memory, time });
             });
 
             proc.on('error', err => {
