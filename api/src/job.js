@@ -226,10 +226,12 @@ class Job {
             proc.stderr.on('data', async data => {
                 if (event_bus !== null) {
                     event_bus.emit('stderr', data);
-                } else if (stderr.length > this.runtime.output_max_size) {
-                    this.logger.info(`stderr length exceeded`);
-                    process.kill(proc.pid, 'SIGKILL');
-                } else {
+                }
+                //  else if (stderr.length > this.runtime.output_max_size) {
+                //     this.logger.info(`stderr length exceeded`);
+                //     process.kill(proc.pid, 'SIGKILL');
+                // }
+                else {
                     stderr += data;
                     output += data;
                 }
@@ -238,10 +240,12 @@ class Job {
             proc.stdout.on('data', async data => {
                 if (event_bus !== null) {
                     event_bus.emit('stdout', data);
-                } else if (stdout.length > this.runtime.output_max_size) {
-                    this.logger.info(`stdout length exceeded`);
-                    process.kill(proc.pid, 'SIGKILL');
-                } else {
+                }
+                //  else if (stdout.length > this.runtime.output_max_size) {
+                //     this.logger.info(`stdout length exceeded`);
+                //     process.kill(proc.pid, 'SIGKILL');
+                // }
+                else {
                     stdout += data;
                     output += data;
                 }
