@@ -424,3 +424,9 @@ various privilege escalation, denial-of-service, and resource saturation threats
 # License
 
 Piston is licensed under the MIT license.
+
+# Deploy in kubernetes
+
+```bash
+cd api && npm run deploy
+```
