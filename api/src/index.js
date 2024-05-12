@@ -72,6 +72,7 @@ expressWs(app);
     app.use(body_parser.json());
 
     app.use((err, req, res, next) => {
+        logger.error(err);
         return res.status(400).send({
             stack: err.stack,
         });

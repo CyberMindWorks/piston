@@ -5,6 +5,7 @@ PISTON_PATH="$(dirname "$(realpath "$0")")"
 
 cd "$PISTON_PATH"
 PISTON_ENV=$(cat .piston_env 2> /dev/null || echo dev)
+echo "Using environment: $PISTON_ENV"
 
 docker_compose(){
     if [ -f "docker-compose.$PISTON_ENV.yaml" ]; then
