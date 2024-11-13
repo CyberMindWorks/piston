@@ -2,16 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
     annotations:
-        a8r.io/description: deployment of code execution engine for SAT project
+        a8r.io/description: deployment of code execution engine for Black Bucks project
         app.kubernetes.io/component: deployment
         app.kubernetes.io/name: 'piston-api-deployment'
-        app.kubernetes.io/part-of: 'sat'
-    creationTimestamp: null
     labels:
         io.kompose.service: pisont-api-deployment
     name: piston-api-deployment
 spec:
-    replicas:
+    replicas: 10
     selector:
         matchLabels:
             io.kompose.service: piston-api
@@ -19,8 +17,6 @@ spec:
         type: Recreate
     template:
         metadata:
-            annotations:
-            creationTimestamp: null
             labels:
                 io.kompose.service: piston-api
         spec:
@@ -29,7 +25,9 @@ spec:
                   name: piston-api
                   ports:
                       - containerPort: 2000
-                  resources: {}
+                  env:
+                      - name: PISTON_OUTPUT_MAX_SIZE
+                        value: "2048"
                   volumeMounts:
                       - mountPath: /piston/packages
                         name: my-pv

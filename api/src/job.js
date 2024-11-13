@@ -261,6 +261,7 @@ class Job {
                     stdout.length + data.length >
                     this.runtime.output_max_size
                 ) {
+                    output=`Output length greater than ${this.runtime.output_max_size}`;
                     this.logger.info(`stdout length exceeded`);
                     try {
                         process.kill(proc.pid, 'SIGKILL');

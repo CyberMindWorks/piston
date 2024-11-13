@@ -1,4 +1,6 @@
-FROM node:15.10.0-buster-slim
+FROM --platform=linux/amd64 node:15.10.0-buster-slim
+
+
 
 ENV DEBIAN_FRONTEND=noninteractive
 
