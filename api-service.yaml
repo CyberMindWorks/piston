@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: piston-api-service
+  name: postgres-api-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
-  - port: 80
-    targetPort: 2000
+  - port: 5432
+    targetPort: 5432
   selector:
-    io.kompose.service: piston-api
+    io.kompose.service: postgres-api

@@ -21,7 +21,7 @@ spec:
                 io.kompose.service: piston-api
         spec:
             containers:
-                - image: public.ecr.aws/r8o5c0r9/bb-piston-v2:latest
+                - image: pistonbb.azurecr.io/bb-piston-v2:latest
                   name: piston-api
                   ports:
                       - containerPort: 2000

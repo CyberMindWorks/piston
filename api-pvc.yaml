@@ -6,9 +6,9 @@ metadata:
     io.kompose.service: data-piston
   name: data-piston
 spec:
-  storageClassName: gp2
+  storageClassName: azurefile-csi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 100Gi
